@@ -1,0 +1,1481 @@
+/* =========================================
+   Variables & Typographie
+========================================= */
+:root {
+  /* Options de police de titres testables :
+     Option 1: 'Cormorant Garamond', Georgia, serif (Harmonie littéraire, poétique, élégance livre)
+     Option 2: 'Bodoni Moda', Georgia, serif (Haute couture, romance chic)
+     Option 3: 'Italiana', serif (Minimaliste luxe, gracieux)
+     Option 4: 'Syne', sans-serif (Ultra-moderne, dynamique, BookTok)
+     Option 5: 'Playfair Display', Georgia, serif (Romance classique)
+     Option 6: 'Cinzel', serif (Romain impérial)
+  */
+  --font-title: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Cormorant Garamond', Georgia, serif;
+  --font-ui: 'Plus Jakarta Sans', sans-serif;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #060913;
+  color: #ffffff;
+  font-family: var(--font-ui);
+}
+
+.page-container {
+  position: relative;
+  width: 100%;
+}
+
+/* =========================================
+   Effet Pluie Réaliste (Cinematic Rain Overlay)
+========================================= */
+.rain-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.9;
+}
+
+/* =========================================
+   1er Écran : Hero Section
+   (Vidéo, Couverture, Boutons, Player défilent ensemble)
+========================================= */
+.hero-screen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 30px;
+  background-color: #060913;
+}
+
+/* Fond Vidéo attaché au Hero */
+.video-background-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  background-color: #060913;
+}
+
+.video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(6, 9, 19, 0.25);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Couverture du livre en fondu */
+.book-cover-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.6s ease;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    rgba(6, 9, 19, 0.3) 0%,
+    rgba(6, 9, 19, 0.85) 100%
+  );
+}
+
+.book-cover-container.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.book-cover-img {
+  max-width: 85vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8),
+              0 0 40px rgba(212, 160, 23, 0.15);
+  transform: scale(0.96);
+  transition: transform 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.book-cover-container.show .book-cover-img {
+  transform: scale(1);
+}
+
+/* Grand Bouton Amazon & Librairies (Attaché au Hero) */
+.sidebar-buy-container {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%) translateX(40px);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+              visibility 1.2s ease;
+}
+
+.sidebar-buy-container.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+}
+
+.btn-amazon-large {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 26px;
+  background: linear-gradient(135deg, rgba(20, 24, 38, 0.88) 0%, rgba(10, 14, 26, 0.96) 100%);
+  border: 1px solid rgba(255, 186, 8, 0.35);
+  border-radius: 20px;
+  color: #ffffff;
+  text-decoration: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6),
+              0 0 25px rgba(255, 186, 8, 0.15);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+  max-width: 380px;
+}
+
+.btn-amazon-large:hover {
+  transform: translateX(-8px) scale(1.03);
+  background: linear-gradient(135deg, rgba(28, 34, 52, 0.96) 0%, rgba(14, 19, 36, 0.98) 100%);
+  border-color: #ffba08;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75),
+              0 0 35px rgba(255, 186, 8, 0.35);
+}
+
+.btn-amazon-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff9900 0%, #e47911 100%);
+  color: #111420;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(255, 153, 0, 0.35);
+  transition: transform 0.3s ease;
+}
+
+.btn-amazon-large:hover .btn-amazon-icon {
+  transform: rotate(-6deg) scale(1.08);
+}
+
+.btn-amazon-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+}
+
+.btn-amazon-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #ffba08;
+}
+
+.btn-amazon-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.btn-amazon-subtitle {
+  font-size: 13px;
+  color: #9ba1b8;
+  font-weight: 400;
+}
+
+.btn-amazon-arrow {
+  color: #ffba08;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+  margin-left: 4px;
+}
+
+.btn-amazon-large:hover .btn-amazon-arrow {
+  transform: translateX(6px);
+}
+
+.other-retailers-panel {
+  margin-top: 14px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.retailers-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.retailers-divider::before,
+.retailers-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.retailers-divider span {
+  padding: 0 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #7d859b;
+}
+
+.retailers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.retailer-chip {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  background: rgba(16, 20, 32, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-decoration: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.retailer-chip:hover {
+  background: rgba(28, 36, 56, 0.9);
+  border-color: rgba(255, 186, 8, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.retailer-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e2e8f0;
+  line-height: 1.2;
+}
+
+.retailer-tag {
+  font-size: 10px;
+  color: #8b94a8;
+  margin-top: 2px;
+}
+
+.retailer-chip:hover .retailer-name {
+  color: #ffba08;
+}
+
+/* Widget Playlist Spotify (Attaché au Hero) */
+.spotify-widget-container {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.spotify-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: rgba(18, 22, 34, 0.85);
+  border: 1px solid rgba(29, 185, 84, 0.4);
+  border-radius: 50px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5),
+              0 0 15px rgba(29, 185, 84, 0.15);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.spotify-toggle-btn svg {
+  color: #1db954;
+  transition: transform 0.3s ease;
+}
+
+.spotify-toggle-btn:hover {
+  background: rgba(24, 30, 48, 0.95);
+  border-color: #1db954;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6),
+              0 0 25px rgba(29, 185, 84, 0.3);
+}
+
+.spotify-toggle-btn:hover svg {
+  transform: scale(1.12);
+}
+
+.spotify-embed-card {
+  width: 380px;
+  background: rgba(14, 18, 28, 0.92);
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  border-radius: 16px;
+  padding: 12px 14px 10px 14px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.35s;
+}
+
+.spotify-widget-container.open .spotify-embed-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.spotify-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+
+.spotify-tag {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  color: #1db954;
+}
+
+.spotify-close-btn {
+  background: none;
+  border: none;
+  color: #8b92a8;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: color 0.2s ease;
+}
+
+.spotify-close-btn:hover {
+  color: #ffffff;
+}
+
+/* Indicateur de Scroll */
+.scroll-hint-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  animation: bounceHint 2.4s infinite;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.scroll-hint-container.show {
+  opacity: 1;
+}
+
+.scroll-hint-icon {
+  stroke: #ffba08;
+}
+
+@keyframes bounceHint {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px); }
+  60% { transform: translateY(-4px); }
+}
+
+/* =========================================
+   2e Écran : Section Synopsis (Design Éditorial de Luxe)
+   Harmonie Typographique • Lisibilité Romantique • Cormorant & Cinzel
+========================================= */
+.synopsis-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 130px 28px 150px 28px;
+  background: 
+    radial-gradient(circle at 50% 12%, rgba(168, 85, 247, 0.12) 0%, transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(192, 132, 252, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 15% 85%, rgba(99, 102, 241, 0.06) 0%, transparent 45%),
+    linear-gradient(180deg, #060913 0%, #0d061c 30%, #130a28 65%, #080312 100%);
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.editorial-container {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  text-align: left;
+}
+
+/* En-tête éditorial équilibré */
+.editorial-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.editorial-kicker {
+  display: inline-block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #c084fc;
+  margin-bottom: 14px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid rgba(192, 132, 252, 0.22);
+}
+
+.editorial-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(42px, 6vw, 56px);
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin-bottom: 10px;
+  line-height: 1.1;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(192, 132, 252, 0.2);
+}
+
+.editorial-author {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Séparateur ornemental raffiné */
+.editorial-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 0 auto 38px auto;
+  max-width: 180px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(192, 132, 252, 0.45), transparent);
+}
+
+.divider-gem {
+  color: #c084fc;
+  font-size: 12px;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 6px rgba(192, 132, 252, 0.6));
+}
+
+/* Citation d'accroche harmonieuse */
+.editorial-quote {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(21px, 2.5vw, 24px);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #f3e8ff;
+  text-align: center;
+  margin: 0 auto 48px auto;
+  max-width: 650px;
+  padding: 0 16px;
+  position: relative;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Corps du texte : entièrement uniforme, fluide et harmonieux sur toute la section */
+.editorial-prose {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 20px;
+  line-height: 1.8;
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: 0.15px;
+  padding-bottom: 38px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.editorial-prose p {
+  margin-bottom: 22px;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.editorial-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.editorial-prose .editorial-mantra {
+  margin: 22px 0;
+  line-height: 1.8;
+}
+
+/* =========================================
+   Carrousel Automatique des Personnages
+========================================= */
+.characters-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 620px;
+  margin: 48px auto 20px auto;
+}
+
+.characters-carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.7),
+    0 0 35px rgba(168, 85, 247, 0.25);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  background: #0d061c;
+  /* Évite les artefacts de contour sur Safari/Chrome avec border-radius */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+}
+
+.characters-carousel-track {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: none;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  border: none;
+  outline: none;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.carousel-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none;
+  outline: none;
+}
+
+/* Boutons de navigation du carrousel (Positionnés HORS de l'image) */
+.carousel-nav-btn {
+  position: relative;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(18, 22, 38, 0.75);
+  border: 1px solid rgba(192, 132, 252, 0.35);
+  color: #f3e8ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.carousel-nav-btn:hover {
+  background: rgba(168, 85, 247, 0.4);
+  border-color: #ffffff;
+  color: #ffffff;
+  transform: scale(1.12);
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.45);
+}
+
+.carousel-nav-btn:active {
+  transform: scale(0.96);
+}
+
+/* Indicateurs (points - positionnés HORS de l'image sous le carrousel) */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 18px auto 0 auto;
+  padding: 8px 18px;
+  width: fit-content;
+  border-radius: 30px;
+  background: rgba(18, 22, 38, 0.65);
+  border: 1px solid rgba(192, 132, 252, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.carousel-dot:hover {
+  background: rgba(192, 132, 252, 0.8);
+}
+
+.carousel-dot.active {
+  width: 24px;
+  border-radius: 12px;
+  background: #c084fc;
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.85);
+}
+
+/* =========================================
+   Thèmes & Tropes du Roman (Présentation éditoriale textuelle)
+========================================= */
+.editorial-tropes-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 32px auto 0 auto;
+  max-width: 600px;
+  text-align: center;
+  user-select: text;
+  cursor: default;
+}
+
+.trope-item {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 19px;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: #e9d5ff;
+  transition: color 0.3s ease;
+}
+
+.trope-sep {
+  font-size: 9px;
+  color: rgba(192, 132, 252, 0.45);
+  user-select: none;
+}
+
+/* Bouton d'achat en bas du synopsis */
+.editorial-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+}
+
+.btn-synopsis-buy {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 44px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.9) 0%, rgba(126, 34, 206, 0.95) 100%);
+  border: 1px solid rgba(216, 180, 254, 0.4);
+  border-radius: 50px;
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 12px 30px rgba(147, 51, 234, 0.35), 0 0 20px rgba(192, 132, 252, 0.2);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-synopsis-buy:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.95) 0%, rgba(147, 51, 234, 1) 100%);
+  box-shadow: 0 18px 40px rgba(147, 51, 234, 0.5), 0 0 30px rgba(192, 132, 252, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-synopsis-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.btn-synopsis-badge {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* =========================================
+   3e Écran : Section À Propos de l'Auteur
+========================================= */
+.author-section {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 120px 28px 140px 28px;
+  background: 
+    radial-gradient(circle at 50% 25%, rgba(147, 51, 234, 0.08) 0%, transparent 60%),
+    linear-gradient(180deg, #080312 0%, #0d061c 50%, #060913 100%);
+  background-color: #080312;
+  color: #ffffff;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -30px 60px rgba(8, 3, 18, 0.95);
+}
+
+.author-container {
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 6;
+  text-align: center;
+}
+
+.author-header {
+  margin-bottom: 24px;
+}
+
+.author-kicker {
+  display: inline-block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #c084fc;
+  margin-bottom: 14px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid rgba(192, 132, 252, 0.22);
+}
+
+.author-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(38px, 5.5vw, 48px);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+
+/* Cadre rond élégant recadré sur le visage et le livre */
+.author-portrait-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto 32px auto;
+}
+
+.author-portrait-frame {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(192, 132, 252, 0.45);
+  box-shadow: 
+    0 12px 35px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(168, 85, 247, 0.3);
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  background-color: #120924;
+}
+
+.author-portrait-frame:hover {
+  transform: scale(1.03);
+  border-color: rgba(192, 132, 252, 0.85);
+  box-shadow: 
+    0 16px 45px rgba(0, 0, 0, 0.7),
+    0 0 35px rgba(168, 85, 247, 0.5);
+}
+
+.author-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Centrage précis sur le visage de Sarah et le livre Rain Delay */
+  object-position: 52% 42%;
+  transform: scale(1.12);
+  display: block;
+}
+
+.author-content {
+  margin-top: 10px;
+}
+
+.author-bio {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 20px;
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin-bottom: 38px;
+}
+
+.author-bio p {
+  margin-bottom: 20px;
+}
+
+.author-bio p:last-child {
+  margin-bottom: 0;
+}
+
+.author-bio strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.author-bio em {
+  color: #e9d5ff;
+  font-style: italic;
+}
+
+.author-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.author-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #e2e8f0;
+  background: rgba(18, 22, 38, 0.7);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  border-radius: 50px;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.author-link-pill svg {
+  color: #c084fc;
+  transition: transform 0.3s ease;
+}
+
+.author-link-pill:hover {
+  background: rgba(30, 20, 50, 0.9);
+  border-color: #c084fc;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(147, 51, 234, 0.25);
+}
+
+.author-link-pill:hover svg {
+  transform: scale(1.15);
+}
+
+/* =========================================
+   4e Écran : Section Contact & Formulaire
+========================================= */
+.contact-section {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 110px 28px 140px 28px;
+  background: 
+    radial-gradient(circle at 50% 20%, rgba(168, 85, 247, 0.09) 0%, transparent 60%),
+    linear-gradient(180deg, #060913 0%, #0d061c 45%, #05020c 100%);
+  background-color: #060913;
+  color: #ffffff;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.contact-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 6;
+}
+
+.contact-section .section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contact-kicker {
+  display: inline-block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #c084fc;
+  margin-bottom: 14px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid rgba(192, 132, 252, 0.22);
+}
+
+.contact-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(38px, 5.5vw, 48px);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+
+/* Grille des cartes de contact */
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 680px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.contact-info-card {
+  background: rgba(16, 20, 36, 0.75);
+  border: 1px solid rgba(192, 132, 252, 0.22);
+  border-radius: 18px;
+  padding: 2rem 1.4rem;
+  text-align: center;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.contact-info-card:hover {
+  border-color: rgba(192, 132, 252, 0.6);
+  transform: translateY(-5px);
+  background: rgba(24, 30, 52, 0.88);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(168, 85, 247, 0.25);
+}
+
+.contact-info-card .info-icon {
+  color: #c084fc;
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(192, 132, 252, 0.12);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.contact-info-card:hover .info-icon {
+  transform: scale(1.1);
+  color: #ffffff;
+  background: rgba(192, 132, 252, 0.25);
+}
+
+.contact-info-card h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.6rem;
+  letter-spacing: 1px;
+}
+
+.contact-info-card .info-value {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  display: inline-block;
+}
+
+.contact-info-card .info-value:hover {
+  color: #c084fc;
+}
+
+.contact-info-card .social-links {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.contact-info-card .social-link {
+  color: rgba(255, 255, 255, 0.75);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: rgba(192, 132, 252, 0.08);
+  transition: all 0.3s ease;
+}
+
+.contact-info-card .social-link:hover {
+  color: #ffffff;
+  border-color: #c084fc;
+  background: rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+}
+
+/* Formulaire de Contact */
+.contact-form-container {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem 1.3rem;
+  background: rgba(16, 20, 36, 0.75);
+  border: 1px solid rgba(192, 132, 252, 0.25);
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.form-input:focus {
+  border-color: #c084fc;
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.25);
+  background: rgba(22, 28, 48, 0.92);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.form-submit-wrapper {
+  text-align: center;
+  margin-top: 0.6rem;
+}
+
+.contact-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 15px 38px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.9) 0%, rgba(126, 34, 206, 0.95) 100%);
+  border: 1px solid rgba(216, 180, 254, 0.4);
+  border-radius: 50px;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(147, 51, 234, 0.35);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.contact-submit-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.95) 0%, rgba(147, 51, 234, 1) 100%);
+  box-shadow: 0 15px 35px rgba(147, 51, 234, 0.5), 0 0 25px rgba(192, 132, 252, 0.35);
+  border-color: #ffffff;
+}
+
+.contact-form-status {
+  margin-top: 1.2rem;
+  text-align: center;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+/* =========================================
+   Footer
+========================================= */
+.footer {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #030107;
+  color: rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: 10;
+}
+
+.footer-brand {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #c084fc;
+  margin-bottom: 0.5rem;
+}
+
+.footer-copy {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.5px;
+}
+
+/* =========================================
+   Responsive Design (Tablettes & Mobiles)
+========================================= */
+@media (max-width: 1024px) {
+  .sidebar-buy-container {
+    right: 20px;
+    max-width: 330px;
+  }
+  .btn-amazon-large {
+    padding: 14px 18px;
+    gap: 14px;
+  }
+  .btn-amazon-title {
+    font-size: 18px;
+  }
+  .book-cover-img {
+    max-width: 70vw;
+    max-height: 70vh;
+  }
+  .spotify-widget-container {
+    left: 20px;
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .book-cover-container {
+    padding: 16px;
+    padding-bottom: 260px;
+  }
+  .book-cover-img {
+    max-width: 88vw;
+    max-height: 52vh;
+    border-radius: 10px;
+  }
+  .sidebar-buy-container {
+    right: 14px;
+    left: 14px;
+    top: auto;
+    bottom: 16px;
+    max-width: none;
+    transform: translateY(30px);
+  }
+  .sidebar-buy-container.show {
+    transform: translateY(0);
+  }
+  .btn-amazon-large {
+    max-width: 100%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    justify-content: flex-start;
+  }
+  .btn-amazon-icon {
+    width: 44px;
+    height: 44px;
+  }
+  .btn-amazon-title {
+    font-size: 16px;
+  }
+  .btn-amazon-subtitle {
+    font-size: 11px;
+  }
+  .other-retailers-panel {
+    max-width: 100%;
+    margin-top: 10px;
+  }
+  .retailers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .retailer-chip {
+    padding: 8px 10px;
+  }
+  .retailer-name {
+    font-size: 11px;
+  }
+  .spotify-widget-container {
+    top: 16px;
+    bottom: auto;
+    left: 14px;
+    right: 14px;
+    align-items: flex-start;
+  }
+  .spotify-toggle-btn {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+  .spotify-embed-card {
+    width: 100%;
+    max-width: 360px;
+  }
+  .synopsis-section {
+    padding: 70px 18px 90px 18px;
+  }
+  .editorial-header {
+    margin-bottom: 20px;
+  }
+  .editorial-title {
+    font-size: 32px;
+    letter-spacing: 2.5px;
+  }
+  .editorial-author {
+    font-size: 12px;
+    letter-spacing: 2.5px;
+  }
+  .editorial-quote {
+    font-size: 19px;
+    margin-bottom: 36px;
+    padding: 0 8px;
+  }
+  .editorial-prose {
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  .editorial-prose p {
+    margin-bottom: 18px;
+  }
+  .editorial-themes {
+    margin-top: 40px;
+    padding-top: 26px;
+    gap: 8px;
+  }
+  .theme-pill {
+    padding: 6px 14px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .editorial-cta {
+    margin-top: 36px;
+  }
+  .btn-synopsis-buy {
+    width: 100%;
+    padding: 14px 20px;
+  }
+  .author-section {
+    padding: 70px 18px 90px 18px;
+  }
+  .author-portrait-frame {
+    width: 180px;
+    height: 180px;
+  }
+  .author-name {
+    font-size: 28px;
+  }
+  .author-bio {
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  .author-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .author-link-pill {
+    width: 100%;
+    justify-content: center;
+  }
+  .characters-carousel-wrapper {
+    gap: 10px;
+    max-width: 100%;
+  }
+  .carousel-nav-btn {
+    width: 38px;
+    height: 38px;
+  }
+  .characters-carousel-container {
+    max-width: 340px;
+  }
+  .contact-section {
+    padding: 70px 18px 90px 18px;
+  }
+  .contact-title {
+    font-size: 28px;
+  }
+  .contact-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+  }
+  .contact-info-card {
+    padding: 1.6rem 1.2rem;
+  }
+  .contact-submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .book-cover-container {
+    padding-bottom: 280px;
+  }
+  .book-cover-img {
+    max-height: 44vh;
+  }
+  .btn-amazon-large {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .btn-amazon-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+  .btn-amazon-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .retailers-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rain Delay — Sarah Witherspoon</title>
+  <!-- Google Fonts Optimization: Only active fonts loaded with display=swap -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Rain Effect Canvas -->
+  <canvas id="rainCanvas" class="rain-canvas" aria-hidden="true"></canvas>
+
+  <!-- Main Scrollable Content -->
+  <main class="page-container">
+    <!-- Hero Section (First Screen: Video, Cover, Actions all scroll together) -->
+    <section class="hero-screen" id="hero">
+      <!-- Background Video & Cover attached to Hero -->
+      <div class="video-background-container">
+        <video class="video-bg" autoplay muted loop playsinline preload="metadata" src="./bg-video-optimized.mp4">
+          <source src="./bg-video-optimized.mp4" type="video/mp4">
+          <source src="./Animate_couple_spinning_background_20261012113356.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay"></div>
+
+        <!-- Book Cover Fade-in (Optimized WebP with JPG fallback) -->
+        <div class="book-cover-container" id="bookCover">
+          <picture>
+            <source srcset="./cover.webp" type="image/webp">
+            <img src="71x6+cd6BrL._AC_CR0,0,0,0_SX960_SY720_.jpg" alt="Rain Delay Cover — Sarah Witherspoon" class="book-cover-img" width="960" height="720" fetchpriority="high" decoding="async">
+          </picture>
+        </div>
+      </div>
+
+      <!-- Large Floating Sidebar Amazon Buy Button -->
+      <aside class="sidebar-buy-container">
+        <a href="https://www.amazon.com/dp/B0H9P9MGYS" target="_blank" rel="noopener noreferrer" class="btn-amazon-large" id="buyAmazonBtn">
+          <div class="btn-amazon-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+              <path d="M13.62 13.06c-1.92.16-3.79.52-3.79 2.47 0 1.5 1.05 2.15 2.29 2.15 1.74 0 2.87-1.14 2.87-2.61v-2.01h-1.37zm1.37-3.92h-1.37v1.89h1.37V9.14zm4.27 10.37C17.47 20.84 15.11 21.5 12.16 21.5c-4.42 0-7.85-2.02-9.28-5.34-.14-.32.06-.63.4-.63.22 0 .42.12.51.32 1.25 2.76 4.3 4.41 8.37 4.41 2.57 0 4.7-.63 6.42-1.76.38-.25.84.14.68.51zm.6-1.57c-.22-.29-.95-.35-1.48-.12-.41.18-.76.51-.76.8 0 .19.14.3.37.3.38 0 1.13-.24 1.76-.73.18-.15.22-.39.11-.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.37 13.91c0 1.5-1.2 2.65-2.94 2.65-1.63 0-2.88-.95-2.88-2.65 0-2.28 2.08-2.8 4.45-2.95v-.65c0-.82-.57-1.28-1.55-1.28-1.02 0-1.74.45-2.26 1.05-.15.17-.4.21-.59.08l-.94-.65c-.17-.12-.22-.36-.08-.54.89-1.08 2.22-1.8 3.97-1.8 2.05 0 3.32 1.08 3.32 2.88v4.91h-.05v-1z"/>
+            </svg>
+          </div>
+          <div class="btn-amazon-content">
+            <span class="btn-amazon-tag">AVAILABLE NOW</span>
+            <span class="btn-amazon-title">Get on Amazon</span>
+            <span class="btn-amazon-subtitle">Paperback & Kindle Unlimited</span>
+          </div>
+          <div class="btn-amazon-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
+        </a>
+
+        <!-- Other Retailers / Indie Bookstores Menu -->
+        <div class="other-retailers-panel">
+          <div class="retailers-divider">
+            <span>OR BUY FROM OTHER BOOKSTORES</span>
+          </div>
+          <div class="retailers-grid">
+            <a href="https://www.barnesandnoble.com/w/rain-delay-sarah-witherspoon/1150843000?ean=9798234143013" target="_blank" rel="noopener noreferrer" class="retailer-chip">
+              <span class="retailer-name">Barnes & Noble</span>
+              <span class="retailer-tag">Paperback</span>
+            </a>
+            <a href="https://www.walmart.com/ip/Rain-Delay-Paperback/20687754173" target="_blank" rel="noopener noreferrer" class="retailer-chip">
+              <span class="retailer-name">Walmart</span>
+              <span class="retailer-tag">Paperback</span>
+            </a>
+            <a href="https://thecraftybookstore.com/product-page/rain-delay" target="_blank" rel="noopener noreferrer" class="retailer-chip">
+              <span class="retailer-name">The Crafty Bookstore</span>
+              <span class="retailer-tag">Indie Exclusive</span>
+            </a>
+            <a href="https://thewellreddamsel.com/item/mbDWq73ahZKMpYjKN2BjTw" target="_blank" rel="noopener noreferrer" class="retailer-chip">
+              <span class="retailer-name">The Well Red Damsel</span>
+              <span class="retailer-tag">Indie Shop</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Official Spotify Playlist Widget (Collapsible / Bottom-Left) -->
+      <aside class="spotify-widget-container" id="spotifyWidget">
+        <button class="spotify-toggle-btn" id="spotifyToggle" aria-label="Toggle Spotify Playlist">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.563.387-.857.207-2.35-1.435-5.308-1.76-8.793-.963-.335.077-.67-.133-.746-.468-.077-.334.132-.67.467-.746 3.808-.87 7.076-.506 9.722 1.113.294.18.386.562.207.857zm1.225-2.723c-.226.367-.707.482-1.074.256-2.69-1.653-6.79-2.131-9.97-1.165-.413.125-.849-.108-.974-.522-.125-.414.108-.85.522-.975 3.633-1.103 8.147-.57 11.24 1.332.367.226.482.707.256 1.074zm.105-2.835C14.692 8.94 9.37 8.766 6.279 9.705c-.495.15-1.022-.132-1.172-.627-.15-.494.132-1.022.627-1.172 3.551-1.078 9.428-.874 13.187 1.356.446.265.59 1.002.325 1.448-.265.446-1.002.59-1.325.156z"/>
+          </svg>
+          <span class="spotify-btn-text">Official Soundtrack</span>
+        </button>
+        <div class="spotify-embed-card">
+          <div class="spotify-header">
+            <span class="spotify-tag">OFFICIAL NOVEL PLAYLIST</span>
+            <button class="spotify-close-btn" id="spotifyClose" aria-label="Close Playlist">&times;</button>
+          </div>
+          <iframe 
+            style="border-radius:12px;" 
+            src="https://open.spotify.com/embed/playlist/2r7amjqMiTUjW7BgMDcXjn?utm_source=generator&theme=0" 
+            width="100%" 
+            height="80" 
+            frameBorder="0" 
+            allowfullscreen="" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy">
+          </iframe>
+        </div>
+      </aside>
+
+      <!-- Scroll Down Indicator -->
+      <div class="scroll-hint-container">
+        <span class="scroll-hint-text">Scroll to discover the story</span>
+        <svg class="scroll-hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Official Synopsis Section (Minimalist Editorial Layout) -->
+    <section class="synopsis-section" id="synopsis">
+      <div class="editorial-container">
+        <header class="editorial-header">
+          <span class="editorial-kicker">MILWAUKEE CRAFTERS &bull; BOOK ONE</span>
+          <h2 class="editorial-title">RAIN DELAY</h2>
+          <p class="editorial-author">BY SARAH WITHERSPOON</p>
+        </header>
+
+        <div class="editorial-divider">
+          <span class="divider-line"></span>
+          <span class="divider-gem">✦</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <blockquote class="editorial-quote">
+          “Sometimes in baseball, you get a rain delay. You wait it out, you bide your time, and when the weather clears, you step up to the plate and swing.”
+        </blockquote>
+
+        <div class="editorial-prose">
+          <p>
+            Playing for your hometown team is every baseball player's dream.
+          </p>
+          <p>
+            Some could pen me as the Golden Boy for the Milwaukee Crafters. The face of the team. The all-star. The one all future baseball players will look up to.
+          </p>
+          <p>
+            The team has assigned me a social media manager for the season to not only help maintain my image, but give Milwaukee the proper recognition it deserves.
+          </p>
+          <p>
+            Which, fine. No big deal.
+          </p>
+          <p>
+            That's until I find out who's going to be managing all of that for me this season—Eliana Romano. The girl whose heart I broke five years ago.
+          </p>
+          <p class="editorial-mantra">
+            There can be no distractions.<br>
+            Everything must remain professional.<br>
+            Strictly business.<br>
+            Everything by the books.
+          </p>
+          <p>
+            But one thing was for sure, I was willing to bend some of the rules to make Eliana mine again.
+          </p>
+        </div>
+
+        <!-- Carousel des Personnages & Tropes (1.jpg, 2.jpg, 3.jpg) -->
+        <div class="characters-carousel-wrapper" aria-label="Rain Delay Characters Carousel">
+          <!-- Bouton Précédent (Hors image) -->
+          <button class="carousel-nav-btn prev" id="carouselPrevBtn" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <!-- Cadre Image du Carrousel -->
+          <div class="characters-carousel-container">
+            <div class="characters-carousel-track" id="charactersCarouselTrack">
+              <div class="carousel-slide active">
+                <picture>
+                  <source srcset="./1.webp" type="image/webp">
+                  <img src="./1.jpg" alt="Meet Eliana Romano — Social Media Manager" class="carousel-slide-img" width="1000" height="1250" loading="lazy" decoding="async">
+                </picture>
+              </div>
+              <div class="carousel-slide">
+                <picture>
+                  <source srcset="./2.webp" type="image/webp">
+                  <img src="./2.jpg" alt="Meet Wyatt Mitchell — Shortstop for the Milwaukee Crafters" class="carousel-slide-img" width="1000" height="1250" loading="lazy" decoding="async">
+                </picture>
+              </div>
+              <div class="carousel-slide">
+                <picture>
+                  <source srcset="./3.webp" type="image/webp">
+                  <img src="./3.jpg" alt="Are they lovers? Worse... Eliana & Wyatt" class="carousel-slide-img" width="1000" height="1250" loading="lazy" decoding="async">
+                </picture>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bouton Suivant (Hors image) -->
+          <button class="carousel-nav-btn next" id="carouselNextBtn" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Indicateurs / Dots (Hors image, sous le carrousel) -->
+        <div class="carousel-indicators" id="carouselIndicators">
+          <button class="carousel-dot active" data-index="0" aria-label="Slide 1"></button>
+          <button class="carousel-dot" data-index="1" aria-label="Slide 2"></button>
+          <button class="carousel-dot" data-index="2" aria-label="Slide 3"></button>
+        </div>
+
+        <!-- Tropes & Themes (Présentation éditoriale non-bouton) -->
+        <div class="editorial-tropes-row">
+          <span class="trope-item">Second Chance</span>
+          <span class="trope-sep">✦</span>
+          <span class="trope-item">Baseball Romance</span>
+          <span class="trope-sep">✦</span>
+          <span class="trope-item">Workplace</span>
+          <span class="trope-sep">✦</span>
+          <span class="trope-item">Golden Boy</span>
+        </div>
+
+        <div class="editorial-cta">
+          <a href="https://www.amazon.com/dp/B0H9P9MGYS" target="_blank" rel="noopener noreferrer" class="btn-synopsis-buy">
+            <span class="btn-synopsis-text">Order Rain Delay on Amazon</span>
+            <span class="btn-synopsis-badge">Paperback & Kindle Unlimited</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Author Section -->
+    <section class="author-section" id="author">
+      <div class="author-container">
+        <div class="author-header">
+          <span class="author-kicker">ABOUT THE AUTHOR</span>
+          <h2 class="author-name">Sarah Witherspoon</h2>
+          <div class="editorial-divider">
+            <span class="divider-line"></span>
+            <span class="divider-gem">✦</span>
+            <span class="divider-line"></span>
+          </div>
+        </div>
+
+        <!-- Photo de Sarah tenant le livre -->
+        <div class="author-portrait-wrapper">
+          <div class="author-portrait-frame">
+            <picture>
+              <source srcset="./author.webp" type="image/webp">
+              <img src="./831568087_18624518233024327_9112304119109754592_n.jpg" alt="Sarah Witherspoon holding Rain Delay" class="author-portrait-img" width="800" height="800" loading="lazy" decoding="async">
+            </picture>
+          </div>
+        </div>
+
+        <div class="author-content">
+          <div class="author-bio">
+            <p>
+              Sarah is a Sports Romance author from Wisconsin. Brewing up sports, spice, and happily ever afters, she decided to take the leap and combine her love for writing and sports to create amazing love stories.
+            </p>
+          </div>
+
+          <div class="author-links">
+            <a href="https://www.instagram.com/author.sarahwitherspoon" target="_blank" rel="noopener noreferrer" class="author-link-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              <span>@author.sarahwitherspoon</span>
+            </a>
+            <a href="https://www.tiktok.com/@sarahspooon" target="_blank" rel="noopener noreferrer" class="author-link-pill">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-.85-.06A6.34 6.34 0 0 0 3.14 15.7a6.34 6.34 0 0 0 10.82 4.48c.34-.35.63-.74.87-1.16V9.12a8.27 8.27 0 0 0 4.76 1.48V7.15c0-.15 0-.3-.02-.46h.02z"/>
+              </svg>
+              <span>TikTok: @sarahspooon</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section (Harmonized with Author & Rain Delay Aesthetic) -->
+    <section class="contact-section" id="contact">
+      <div class="contact-container">
+        <div class="section-header">
+          <span class="contact-kicker">GET IN TOUCH</span>
+          <h2 class="contact-title">Contact Sarah</h2>
+          <div class="editorial-divider">
+            <span class="divider-line"></span>
+            <span class="divider-gem">✦</span>
+            <span class="divider-line"></span>
+          </div>
+        </div>
+
+        <!-- Contact Info Cards Grid -->
+        <div class="contact-info-grid">
+          <!-- Card 1: Email Direct -->
+          <div class="contact-info-card">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <h3>Email</h3>
+            <a href="mailto:sarahwitherspoonauthor@gmail.com" class="info-value">sarahwitherspoonauthor@gmail.com</a>
+          </div>
+
+          <!-- Card 3: Connect & Socials -->
+          <div class="contact-info-card">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+            </div>
+            <h3>Connect</h3>
+            <div class="social-links">
+              <a href="https://www.instagram.com/author.sarahwitherspoon" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a href="https://www.tiktok.com/@sarahspooon" target="_blank" rel="noopener noreferrer" aria-label="TikTok" class="social-link">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.85.12V9.4a6.33 6.33 0 0 0-.85-.06A6.34 6.34 0 0 0 3.14 15.7a6.34 6.34 0 0 0 10.82 4.48c.34-.35.63-.74.87-1.16V9.12a8.27 8.27 0 0 0 4.76 1.48V7.15c0-.15 0-.3-.02-.46h.02z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form Container -->
+        <div class="contact-form-container">
+          <form class="contact-form" id="contactForm" name="contact" method="POST" data-netlify="true" netlify>
+            <!-- Netlify form-name hidden field -->
+            <input type="hidden" name="form-name" value="contact">
+            <div class="form-group">
+              <input type="text" id="contact-name" name="name" placeholder="Name" required class="form-input">
+            </div>
+            <div class="form-group">
+              <input type="email" id="contact-email" name="email" placeholder="Email" required class="form-input">
+            </div>
+            <div class="form-group">
+              <input type="text" id="contact-subject" name="subject" placeholder="Subject (Reader Mail, ARC, Business...)" required class="form-input">
+            </div>
+            <div class="form-group">
+              <textarea id="contact-message" name="message" rows="5" placeholder="Type your message here..." required class="form-input form-textarea"></textarea>
+            </div>
+            <div class="form-submit-wrapper">
+              <button type="submit" id="contactSubmitBtn" class="contact-submit-btn">
+                <span id="btnSubmitText">Submit Message</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+            <div id="contactFormStatus" class="contact-form-status" style="display: none;"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p class="footer-brand">Sarah Witherspoon</p>
+        <p class="footer-copy">© 2026 Sarah Witherspoon. All rights reserved. • Rain Delay</p>
+      </div>
+    </footer>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

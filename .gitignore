@@ -1,0 +1,14 @@
+# Dépendances Node.js (inutiles en production)
+node_modules/
+package-lock.json
+
+# Fichiers système macOS
+.DS_Store
+
+# Fichiers temporaires ou logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers de script d'optimisation locale
+optimize.js
