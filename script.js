@@ -252,6 +252,26 @@ function initRainEffect() {
   const canvas = document.getElementById('rainCanvas');
   if (!canvas) return;
 
+  const heroVideo = document.querySelector('.video-bg');
+  let rainTriggered = false;
+
+  function triggerRain() {
+    if (rainTriggered) return;
+    rainTriggered = true;
+    canvas.classList.add('show');
+  }
+
+  if (heroVideo) {
+    // La pluie commence son apparition STRICTEMENT à 0.5 seconde de lecture de la vidéo
+    heroVideo.addEventListener('timeupdate', () => {
+      if (heroVideo.currentTime >= 0.5) {
+        triggerRain();
+      }
+    });
+  } else {
+    setTimeout(triggerRain, 500);
+  }
+
   const ctx = canvas.getContext('2d');
   let width = 0;
   let height = 0;
@@ -380,9 +400,10 @@ function initRainEffect() {
     animationFrameId = requestAnimationFrame(render);
   }
 
-  // Fondu et arrêt de la pluie à l'approche de la section About
+  // Fondu et arrêt de la pluie à l'approche de la section About (seulement si la pluie a déjà démarré)
   const authorSection = document.getElementById('author');
   function checkRainVisibility() {
+    if (!rainTriggered) return;
     if (!authorSection) return;
     const rect = authorSection.getBoundingClientRect();
     // Dès que le haut de la section About approche le bas de l'écran
@@ -401,7 +422,6 @@ function initRainEffect() {
   }
 
   window.addEventListener('scroll', checkRainVisibility, { passive: true });
-  checkRainVisibility();
 
   let resizeTimeout;
   window.addEventListener('resize', () => {
