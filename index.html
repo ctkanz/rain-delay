@@ -235,6 +235,16 @@
 
     <!-- Author Section -->
     <section class="author-section" id="author">
+      <!-- Médaillon Floral à cheval sur les 2 sections (Synopsis & About) -->
+      <div class="floral-bridge-wrapper">
+        <!-- Vidéo native WebM pour Android / Chrome / Edge -->
+        <video id="floralBridgeVideoNative" muted playsinline preload="auto" class="floral-bridge-video floral-native-video">
+          <source src="./orchid-transparent.webm" type="video/webm">
+        </video>
+        <!-- Canvas Chroma Key temps réel pour Safari / iOS -->
+        <canvas class="floral-bridge-canvas floral-safari-canvas" width="960" height="310"></canvas>
+      </div>
+
       <div class="author-container">
         <div class="author-header">
           <span class="author-kicker">ABOUT THE AUTHOR</span>
@@ -281,6 +291,24 @@
           </div>
         </div>
       </div>
+
+      <!-- Vidéo florale transparente en bas -->
+      <div class="author-floral-divider bottom">
+        <!-- Vidéo native WebM pour Android / Chrome / Edge -->
+        <video id="floralBottomVideoNative" muted playsinline preload="auto" class="floral-video floral-native-video">
+          <source src="./orchid-transparent.webm" type="video/webm">
+        </video>
+        <!-- Canvas Chroma Key temps réel pour Safari / iOS -->
+        <canvas class="floral-bottom-canvas floral-safari-canvas" width="960" height="310"></canvas>
+      </div>
+
+      <!-- Vidéos sources maîtresses cachées pour le chroma key en temps réel -->
+      <video id="floralMasterVideo" muted playsinline preload="auto" style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
+        <source src="./Green_screen_chroma_key_1080p_20261013165801.mp4" type="video/mp4">
+      </video>
+      <video id="floralBottomMasterVideo" muted playsinline preload="auto" style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
+        <source src="./Green_screen_chroma_key_1080p_20261013165801.mp4" type="video/mp4">
+      </video>
     </section>
 
     <!-- Contact Section (Harmonized with Author & Rain Delay Aesthetic) -->
@@ -370,15 +398,12 @@
         </div>
       </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-content">
-        <p class="footer-brand">Sarah Witherspoon</p>
-        <p class="footer-copy">© 2026 Sarah Witherspoon. All rights reserved. • Rain Delay</p>
-      </div>
-    </footer>
   </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="footer-copy">© 2026 Sarah Witherspoon. All rights reserved.</p>
+  </footer>
 
   <script src="script.js" defer></script>
 </body>

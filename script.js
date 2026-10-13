@@ -428,3 +428,201 @@ function initRainEffect() {
   resize();
   animationFrameId = requestAnimationFrame(render);
 }
+
+// =========================================
+// Moteur Hybride Intelligent :
+// - Android / Chrome / Edge : Vidéo native WebM transparente (accélération GPU pure)
+// - Safari / iOS (iPhone, Mac) : Canvas Chroma Key temps réel (transparence sans bug Apple)
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Détection Safari / iOS
+  const isSafariOrIOS = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || 
+                        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (!isSafariOrIOS) {
+    // ==========================================
+    // 1. MODE ANDROID / CHROME : VIDÉO NATIVE WEBM
+    // ==========================================
+    // On cache les canvas Safari et on affiche les vidéos natives WebM
+    document.querySelectorAll('.floral-safari-canvas').forEach(c => c.style.display = 'none');
+    
+    function setupNativeVideo(videoEl) {
+      if (!videoEl) return;
+      videoEl.style.display = 'block';
+
+      let hasPlayed = false;
+      function playOnce() {
+        if (hasPlayed) return;
+        hasPlayed = true;
+        videoEl.currentTime = 0;
+        const playPromise = videoEl.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => console.warn('Native video play error:', err));
+        }
+      }
+
+      // Si l'écran est déjà dessus au rechargement
+      function checkVisible() {
+        const rect = videoEl.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          playOnce();
+        }
+      }
+
+      if (videoEl.readyState >= 2) {
+        checkVisible();
+      } else {
+        videoEl.addEventListener('loadeddata', checkVisible, { once: true });
+        videoEl.addEventListener('canplay', checkVisible, { once: true });
+      }
+
+      // Déclencheur au défilement
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              playOnce();
+              obs.disconnect();
+            }
+          });
+        }, { threshold: 0.05 });
+        obs.observe(videoEl);
+      }
+    }
+
+    setupNativeVideo(document.getElementById('floralBridgeVideoNative'));
+    setupNativeVideo(document.getElementById('floralBottomVideoNative'));
+
+  } else {
+    // ==========================================
+    // 2. MODE APPLE / SAFARI : CANVAS CHROMA KEY
+    // ==========================================
+    document.body.classList.add('is-safari');
+    document.querySelectorAll('.floral-native-video').forEach(v => v.style.display = 'none');
+
+    function setupChromaPlayer(videoEl, canvasEl) {
+      if (!videoEl || !canvasEl) return;
+      const ctx = canvasEl.getContext('2d', { willReadFrequently: true });
+      const offCanvas = document.createElement('canvas');
+      const offCtx = offCanvas.getContext('2d', { willReadFrequently: true });
+      offCanvas.width = 960;
+      offCanvas.height = 310;
+
+      let hasStarted = false;
+      let animId = null;
+
+      function processFrame() {
+        if (videoEl.paused || videoEl.ended) {
+          if (videoEl.ended && animId) {
+            cancelAnimationFrame(animId);
+          }
+          return;
+        }
+
+        const vw = videoEl.videoWidth || 1920;
+        const vh = videoEl.videoHeight || 1080;
+        // Découpe élargie vers le haut (18% au lieu de 24%) pour ne couper aucun pétale
+        const cropY = Math.floor(vh * 0.18);
+        const cropH = Math.floor(vh * 0.62);
+
+        offCtx.drawImage(videoEl, 0, cropY, vw, cropH, 0, 0, 960, 310);
+        const imgData = offCtx.getImageData(0, 0, 960, 310);
+        const data = imgData.data;
+        const len = data.length;
+
+        for (let i = 0; i < len; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2];
+          if (g > 85 && g > r * 1.35 && g > b * 1.35) {
+            data[i + 3] = 0;
+          } else if (g > 65 && g > r * 1.15 && g > b * 1.15) {
+            const factor = Math.max(0, Math.min(1, (g - Math.max(r, b)) / 50));
+            data[i + 3] = Math.floor(data[i + 3] * (1 - factor));
+          }
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+        animId = requestAnimationFrame(processFrame);
+      }
+
+      function renderFirstFrame() {
+        videoEl.currentTime = 0.01;
+        videoEl.addEventListener('seeked', () => {
+          const vw = videoEl.videoWidth || 1920;
+          const vh = videoEl.videoHeight || 1080;
+          const cropY = Math.floor(vh * 0.18);
+          const cropH = Math.floor(vh * 0.62);
+          offCtx.drawImage(videoEl, 0, cropY, vw, cropH, 0, 0, 960, 310);
+          const imgData = offCtx.getImageData(0, 0, 960, 310);
+          const data = imgData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i], g = data[i + 1], b = data[i + 2];
+            if (g > 85 && g > r * 1.35 && g > b * 1.35) {
+              data[i + 3] = 0;
+            } else if (g > 65 && g > r * 1.15 && g > b * 1.15) {
+              const factor = Math.max(0, Math.min(1, (g - Math.max(r, b)) / 50));
+              data[i + 3] = Math.floor(data[i + 3] * (1 - factor));
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+        }, { once: true });
+      }
+
+      if (videoEl.readyState >= 2) {
+        renderFirstFrame();
+      } else {
+        videoEl.addEventListener('loadeddata', renderFirstFrame, { once: true });
+      }
+
+      function startPlayback() {
+        if (hasStarted) return;
+        hasStarted = true;
+        videoEl.currentTime = 0;
+        const playPromise = videoEl.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            if (!animId) animId = requestAnimationFrame(processFrame);
+          }).catch(err => {
+            console.warn('Playback error:', err);
+          });
+        }
+      }
+
+      function checkVisibilityOnLoad() {
+        const rect = canvasEl.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          startPlayback();
+        }
+      }
+
+      if (videoEl.readyState >= 2) {
+        checkVisibilityOnLoad();
+      } else {
+        videoEl.addEventListener('loadeddata', checkVisibilityOnLoad, { once: true });
+        videoEl.addEventListener('canplay', checkVisibilityOnLoad, { once: true });
+      }
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              startPlayback();
+              observer.disconnect();
+            }
+          });
+        }, { root: null, rootMargin: '0px', threshold: 0.05 });
+        observer.observe(canvasEl);
+      }
+    }
+
+    setupChromaPlayer(
+      document.getElementById('floralMasterVideo'),
+      document.querySelector('.floral-bridge-canvas')
+    );
+
+    setupChromaPlayer(
+      document.getElementById('floralBottomMasterVideo'),
+      document.querySelector('.floral-bottom-canvas')
+    );
+  }
+});

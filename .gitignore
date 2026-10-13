@@ -12,3 +12,7 @@ yarn-error.log*
 
 # Fichiers de script d'optimisation locale
 optimize.js
+
+# Fichiers de sauvegarde de travail & essais vidéo
+*.backup
+orchid-transparent.mov
